@@ -34,7 +34,7 @@
   "policy": {
     "contentRating": "E",
     "fly": true,
-    "voiceEnabled": true,
+    "voiceEnabled": false,
     "blacklist": [],
     "teleportPosition": ""
   },
