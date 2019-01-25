@@ -81,33 +81,33 @@ ground.add(new Transform({
 
 const wall_front_L_R = new Entity()
 wall_front_L_R.add(new Transform({
-  position: new Vector3(5, 0, 12.75), 
-  scale: new Vector3(0.1, 5, 2.5)
+  position: new Vector3(2, 0, 15), 
+  scale: new Vector3(0.1, 5, 6)
 }))
 
 const wall_front_R_L = new Entity()
 wall_front_R_L.add(new Transform({
-  position: new Vector3(5, 0, 7.25), 
-  scale: new Vector3(0.1, 5, 2.5)
+  position: new Vector3(2, 0, 5), 
+  scale: new Vector3(0.1, 5, 6)
 }))
 
 const wall_front_up = new Entity()
 wall_front_up.add(new Transform({
-  position: new Vector3(5, 3, 10), 
-  scale: new Vector3(0.1, 1, 8)
+  position: new Vector3(2, 3, 10), 
+  scale: new Vector3(0.1, 1, 16)
 }))
 
 // Add the two sides to the door
 const doorL = new Entity()
 doorL.add(new Transform({
-  position: new Vector3(1, 0, 6.25),
-  scale: new Vector3(0.05, 3, 1.5)
+  position: new Vector3(-2, 0, 6),
+  scale: new Vector3(0.05, 3, 2.1)
 }))
 
 const doorR = new Entity()
 doorR.add(new Transform({
-  position: new Vector3(1, 0, 7.75),
-  scale: new Vector3(0.05, 3, 1.5)
+  position: new Vector3(-2, 0, 8),
+  scale: new Vector3(0.05, 3, 2.1)
 }))
 
 //wall_back.add(collideBox)
@@ -123,16 +123,6 @@ wall_front_up.add(collideBox)
 roof.add(collideBox)
 ground.add(collideBox)
 
-/*
-
-
-
-engine.addEntity(wall_back_L_L)
-
-engine.addEntity(wall_back_R_R)
-
-
-*/
 engine.addEntity(wall_right)
 engine.addEntity(wall_left)
 engine.addEntity(wall_back)
@@ -141,15 +131,15 @@ engine.addEntity(wall_front_up)
 engine.addEntity(wall_front_L_R)
 engine.addEntity(wall_front_R_L)
 
-engine.addEntity(ground)
+//engine.addEntity(ground)
 engine.addEntity(roof)
 
 doorL.add(collideBox)
-doorL.add(new DoorState(new Vector3(1, 0, 6.25), new Vector3(1, 0, 5.25)))
+doorL.add(new DoorState(new Vector3(-2, 0, 6), new Vector3(-2, 0, 4.25)))
 engine.addEntity(doorL)
 
 doorR.add(collideBox)
-doorR.add(new DoorState(new Vector3(1, 0, 7.75), new Vector3(1, 0, 8.75)))
+doorR.add(new DoorState(new Vector3(-2, 0, 8), new Vector3(-2, 0, 9.75)))
 engine.addEntity(doorR)
 
 // Define a material to color the door red
