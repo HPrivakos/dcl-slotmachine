@@ -131,7 +131,7 @@ engine.addEntity(wall_front_up)
 engine.addEntity(wall_front_L_R)
 engine.addEntity(wall_front_R_L)
 
-//engine.addEntity(ground)
+engine.addEntity(ground)
 engine.addEntity(roof)
 
 doorL.add(collideBox)
