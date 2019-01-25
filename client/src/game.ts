@@ -11,6 +11,18 @@ export class DoorState {
   }
 }
 
+// Colors def
+let red = Color3.Red()
+let green = Color3.Green()
+let blue = Color3.Blue()
+let black = Color3.Black()
+let white = Color3.White()
+let purple = Color3.Purple()
+let magenta = Color3.Magenta()
+let yellow = Color3.Yellow()
+let gray = Color3.Gray()
+let teal = Color3.Teal()
+
 const doors = engine.getComponentGroup(DoorState)
 
 export class RotatorSystem implements ISystem {
@@ -39,15 +51,8 @@ engine.addSystem(new RotatorSystem())
 
 let collideBox = new BoxShape()
 collideBox.withCollisions = true
-// Define fixed walls
-/*
-const wall_back = new Entity()
-wall_back.add(new Transform({
-  position: new Vector3(15, 1, 0.05), 
-  scale: new Vector3(30, 6, 0.1)
-}))
-*/
 
+// Define fixed walls
 const wall_right = new Entity()
 wall_right.add(new Transform({
   position: new Vector3(20, 0, 2), 
@@ -186,3 +191,61 @@ function openDoor(parent: Entity){
     state.closed = !state.closed
   }   
 }
+
+const cube1 = new Entity()
+const cube2 = new Entity()
+const cube3 = new Entity()
+
+const pull = new Entity()
+
+cube1.add(new Transform({
+    position: new Vector3(10, 1.5, 10.75), 
+    scale: new Vector3(0.5, 0.5, 0.5)
+}))
+
+cube2.add(new Transform({
+    position: new Vector3(10, 1.5, 10), 
+    scale: new Vector3(0.5, 0.5, 0.5)
+}))
+
+cube3.add(new Transform({
+    position: new Vector3(10, 1.5, 9.25), 
+    scale: new Vector3(0.5, 0.5, 0.5)
+}))
+
+pull.add(new Transform({
+    position: new Vector3(10, 1.5, 8), 
+    scale: new Vector3(0.7, 0.7, 0.7)
+}))
+
+
+/*
+pull.add(
+    new OnClic(e => {
+      run_wheel()
+    })
+  )
+  */
+
+cube1.add(new BoxShape())
+cube2.add(new BoxShape())
+cube3.add(new BoxShape())
+pull.add(new BoxShape())
+
+let m1 = new Material()
+m1.albedoColor = green
+
+let m2 = new Material()
+m2.albedoColor = yellow
+
+let m3 = new Material()
+m3.albedoColor = red
+
+cube1.set(m1)
+cube2.set(m2)
+cube3.set(m3)
+
+engine.addEntity(cube1)
+engine.addEntity(cube2)
+engine.addEntity(cube3)
+engine.addEntity(pull)
