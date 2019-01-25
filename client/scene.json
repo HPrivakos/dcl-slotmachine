@@ -3,16 +3,30 @@
     "title": "interactive-text",
     "favicon": "favicon_asset"
   },
-  "contact": {
-    "name": "author-name",
+  "contact": [
+    {
+    "name": "KKuette",
     "email": ""
-  },
+    },
+    {
+    "name": "HPricakos",
+    "email": ""
+    }
+  ],
   "owner": "",
   "scene": {
     "parcels": [
-      "0,0"
+      "0,0",
+      "1,0",
+      "2,0",
+      "0,1",
+      "1,1",
+      "2,1",
+      "0,2",
+      "1,2",
+      "2,2"
     ],
-    "base": "0,0"
+    "base": "1,1"
   },
   "communications": {
     "type": "webrtc",
