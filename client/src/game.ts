@@ -1,3 +1,5 @@
+import { Slot_Machine } from "./modules/slot"
+
 // custom component to handle opening and closing doors
 @Component('doorState')
 export class DoorState {
@@ -45,6 +47,8 @@ export class RotatorSystem implements ISystem {
     }
   }
 }
+
+
 
 // Add system to engine
 engine.addSystem(new RotatorSystem())
@@ -251,9 +255,13 @@ engine.addEntity(cube3)
 engine.addEntity(pull)
 */
 
-const slot = new Entity()
+const slot = new Slot_Machine(new Vector3(10, 0, 8))
+slot.show()
 
-slot.add(new GLTFShape("models/Slot/SlotMachine.gltf"))
-slot.add(new Transform({position: new Vector3(10, 0, 8)}))
+const slot2 = new Slot_Machine(new Vector3(10, 0, 9.5))
+slot2.rotate(-90)
+slot2.show()
 
-engine.addEntity(slot)
+
+const slot3 = new Slot_Machine(new Vector3(10, 0, 6.5))
+slot3.show()
