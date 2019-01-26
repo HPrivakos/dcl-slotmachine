@@ -191,7 +191,7 @@ function openDoor(parent: Entity){
     state.closed = !state.closed
   }   
 }
-
+/*
 const cube1 = new Entity()
 const cube2 = new Entity()
 const cube3 = new Entity()
@@ -219,13 +219,13 @@ pull.add(new Transform({
 }))
 
 
-/*
+
 pull.add(
     new OnClic(e => {
       run_wheel()
     })
   )
-  */
+  
 
 cube1.add(new BoxShape())
 cube2.add(new BoxShape())
@@ -249,3 +249,11 @@ engine.addEntity(cube1)
 engine.addEntity(cube2)
 engine.addEntity(cube3)
 engine.addEntity(pull)
+*/
+
+const slot = new Entity()
+
+slot.add(new GLTFShape("models/Slot/SlotMachine.gltf"))
+slot.add(new Transform({position: new Vector3(10, 0, 8)}))
+
+engine.addEntity(slot)
