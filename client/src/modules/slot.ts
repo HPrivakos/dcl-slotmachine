@@ -6,25 +6,25 @@ export class SpinHandle {
 }
 
 const handle = engine.getComponentGroup(SpinHandle)
-
 export class RotatorSystem implements ISystem {
- 
+
     update(dt: number) {
-      // iterate over the wheels in the component group
-      for (let wheel of handle.entities) {
-        // handy shortcuts
-        let spin = wheel.get(SpinHandle)
-        let transform = wheel.get(Transform)
-        // check state
-        if (spin.active){
-          // spin the wheel
-          transform.rotate(spin.direction, spin.speed * dt)
+        // iterate over the wheels in the component group
+        for (let wheel of handle.entities) {
+            // handy shortcuts
+            let spin = wheel.get(SpinHandle)
+            let transform = wheel.get(Transform)
+            // check state
+            if (spin.active) {
+                // spin the wheel
+                transform.rotate(spin.direction, spin.speed * dt)
+            }
         }
-      }
     }
-  }
+}
 
 engine.addSystem(new RotatorSystem())
+
 
 export class Slot_Machine {
     core: Entity = new Entity;
@@ -42,14 +42,18 @@ export class Slot_Machine {
 
     constructor(pos: Vector3){
       this.position = pos;
+      
       this.build_shape()
       this.move()
+
+
       this.spin_handle.add(new SpinHandle())
       this.spin_handle.add(
           new OnClick(e => {
               let spin = this.spin_handle.get(SpinHandle)
               if (!spin.active){
-                spin.active = true
+                  spin.active = true
+                  log(spin)
               } else {
                 spin.speed += 20
               }
@@ -58,14 +62,14 @@ export class Slot_Machine {
     }
 
     build_shape(){
-      this.core.add(new GLTFShape("models/Slot/SlotMachine.gltf"))
-      this.wheel_1.add(new GLTFShape("models/Slot/Wheel_01.gltf"))
-      this.wheel_2.add(new GLTFShape("models/Slot/Wheel_02.gltf"))
-      this.wheel_3.add(new GLTFShape("models/Slot/Wheel_03.gltf"))
-      this.buttom_1.add(new GLTFShape("models/Slot/Buttom_01.gltf"))
-      this.buttom_2.add(new GLTFShape("models/Slot/Buttom_02.gltf"))
-      this.buttom_3.add(new GLTFShape("models/Slot/Buttom_03.gltf"))
-      this.spin_handle.add(new GLTFShape("models/Slot/SpinHandle.gltf"))
+        this.core.add(new GLTFShape("models/Slot/SlotMachine.gltf"))
+        this.wheel_1.add(new GLTFShape("models/Slot/Wheel_01.gltf"))
+        this.wheel_2.add(new GLTFShape("models/Slot/Wheel_02.gltf"))
+        this.wheel_3.add(new GLTFShape("models/Slot/Wheel_03.gltf"))
+        this.buttom_1.add(new GLTFShape("models/Slot/Buttom_01.gltf"))
+        this.buttom_2.add(new GLTFShape("models/Slot/Buttom_02.gltf"))
+        this.buttom_3.add(new GLTFShape("models/Slot/Buttom_03.gltf"))
+        this.spin_handle.add(new GLTFShape("models/Slot/SpinHandle.gltf"))
     }
 
     move(){
@@ -97,10 +101,10 @@ export class Slot_Machine {
         position: this.position,
         scale: new Vector3(this.size, this.size, this.size)
       }))
-      this.spin_handle.add(new Transform({
-        position: this.position,
-        scale: new Vector3(this.size, this.size, this.size)
-      }))
+    this.spin_handle.set(new Transform({
+        position: new Vector3(this.position.x, this.position.y+1.51, this.position.z+0.58),
+        scale: new Vector3(this.size, this.size, this.size),
+    }));
     }
 
     rotate(value: number){
@@ -115,6 +119,7 @@ export class Slot_Machine {
     }
 
     show(){
+      
       engine.addEntity(this.core)
       engine.addEntity(this.wheel_1)
       engine.addEntity(this.wheel_2)
