@@ -34,6 +34,10 @@ export default class Slot {
         return this.gameData.serverSeedHash;
     }
     
+    public get serverSeed() : string {
+        return this.gameData.serverSeed;
+    }
+    
     getSlotNumbers(serverSeed: string = this.gameData.serverSeed, clientSeed: string = this.gameData.clientSeed): string {
         let finalHash = crypto.createHash('sha512').update(serverSeed + clientSeed).digest('hex')
         let six = finalHash.slice(0, 6);

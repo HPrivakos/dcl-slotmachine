@@ -13,5 +13,7 @@
     "devDependencies": {
         "decentraland-ecs": "^5.0.0"
     },
-    "dependencies": {}
+    "dependencies": {
+        "eth-connect": "^4.0.1"
+    }
 }

@@ -1,46 +1,70 @@
-import Loki from 'lokijs';
 import * as WebSocket from 'ws';
 import Slot from './games/Slots';
+import Users from './Users';
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync'
 
-let test = new Slot("yoloooo", 0.95);
-console.log(test.result());
+const adapter = new FileSync('db.json')
+const db = low(adapter)
 
-var db = new Loki('casino.db', {
-    autoload: true,
-    autosave: true,
-    autosaveInterval: 4000
-});
+db.defaults({ users: [] })
+    .write()
 
-let users = db.getCollection("casino");
-if (users === null) {
-    users = db.addCollection("casino", { indices: ['eth', 'balance'] });
-}
+let usersList = new Users();
+
 
 
 const wss = new WebSocket.Server({ port: 8080 });
+wss.on('error', (e)=>{
+    console.log(e); 
+})
 
-wss.on('connection', function connection(ws: any) {
+wss.on('connection', (ws) => {
+    console.log("connected");    
+    
+    let slot = new Slot("", 1)
+    let ethAddress = '';
     ws.on("message", function incoming(message: any) {
+        console.log(message);
+        
         if (message.startsWith("login ")) {
-            let result = users.where(obj => { return obj.eth == message.split(" ")[1] });
-            if(result.length == 0) {
-                users.insert({ eth: message.split(" ")[1], balance: 1000 });
+            ethAddress = message.split(" ")[1];
+            let result = db.get('users').find({ eth: ethAddress }).size().value()
+            console.log(result);
+            if(result == 0) {
+                db.get('users').push({eth: ethAddress, balance: 1000}).write();
             }
-            message.reply("balance "+result[0].balance)
+            let value = db.get('users').find({ eth: ethAddress }).value();
+            let noOtherWay = JSON.parse(JSON.stringify(value))
+            console.log(noOtherWay.balance);
+            
+            ws.send("balance " + noOtherWay.balance)
         }
-        if (message == "slotProvably") {
+        if (message == "Slot Provably") {
+            ws.send("SlotProva "+slot.serverHash)
+        }
+        if (message.indexOf("Slot Spin") == 0) {
+            let clientSeed = message.split(" ")[2];
+            slot.clientSeed = clientSeed;
+            let result = db.get('users').find({ eth: ethAddress }).value()
+            let noOtherWay = JSON.parse(JSON.stringify(result))
+            if (noOtherWay.balance >= 1){
+                ws.send(slot.getSlotNumbers())
+                noOtherWay.balance--;
+                if(slot.result() != 0){
+                    noOtherWay.balance += slot.result();
+                }
+                db.get('users')
+                    .find({ eth: ethAddress })
+                    .assign({ balance: noOtherWay.balance })
+                    .write()
+                //users.update(result);
+                ws.send("balance " + noOtherWay.balance)
+                let numbers = slot.getSlotNumbers().split('');
+                ws.send("SlotResult " + JSON.stringify({ serverSeed: slot.serverSeed, result: slot.result(), numbers: numbers}))
+                slot = new Slot('', 1);
+            }
         }
     });
 
-    ws.send('something');
 });
-
-let message: string = "login 0x521B0fEf9CDCf250aBaF8e7BC798CBE13fa98692"
-
-let result = users.where(obj => { return obj.eth == message.split(" ")[1] });
-if (result.length == 0) {
-    let test = users.insert({ eth: message.split(" ")[1], balance: 1000 });  
-}
-result = users.where(obj => { return obj.eth == message.split(" ")[1] });
-
-console.log(result);
