@@ -29,15 +29,13 @@ wss.on('connection', (ws) => {
         
         if (message.startsWith("login ")) {
             ethAddress = message.split(" ")[1];
+            console.log(ethAddress);
             let result = db.get('users').find({ eth: ethAddress }).size().value()
-            console.log(result);
             if(result == 0) {
                 db.get('users').push({eth: ethAddress, balance: 1000}).write();
             }
             let value = db.get('users').find({ eth: ethAddress }).value();
-            let noOtherWay = JSON.parse(JSON.stringify(value))
-            console.log(noOtherWay.balance);
-            
+            let noOtherWay = JSON.parse(JSON.stringify(value))            
             ws.send("balance " + noOtherWay.balance)
         }
         if (message == "SlotProvably") {
