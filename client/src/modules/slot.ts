@@ -1,3 +1,5 @@
+import { playSound } from "@decentraland/SoundController";
+
 @Component('SpinHandle')
 export class SpinHandle {
     active: boolean = false
@@ -76,6 +78,9 @@ export class WheelSystem implements ISystem {
                         &&
                         transform.rotation.eulerAngles.z < this.value * 36 + 35
                     ) {
+                        playSound("sounds/wheelstop.mp3", {
+                            volume: 100
+                        })
                         transform.rotation.eulerAngles = new Vector3(0, 0, this.value * 36 + 10);
                         spin.active = false;
                         this.value = 999;
@@ -121,6 +126,9 @@ export class Slot_Machine {
                    new OnClick(e => {
                        let spin = this.spin_handle.get(SpinHandle);
                        if (!this.active && !spin.running) {
+                           playSound("sounds/spin.mp3", {
+                               volume: 100
+                           })
                            socket.send("SlotProvably");
                            spin.active = true;
                            this.active = true;
