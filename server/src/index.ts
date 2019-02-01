@@ -40,10 +40,10 @@ wss.on('connection', (ws) => {
             
             ws.send("balance " + noOtherWay.balance)
         }
-        if (message == "Slot Provably") {
+        if (message == "SlotProvably") {
             ws.send("SlotProva "+slot.serverHash)
         }
-        if (message.indexOf("Slot Spin") == 0) {
+        if (message.indexOf("SlotSpin") == 0) {
             let clientSeed = message.split(" ")[2];
             slot.clientSeed = clientSeed;
             let result = db.get('users').find({ eth: ethAddress }).value()
@@ -61,8 +61,10 @@ wss.on('connection', (ws) => {
                 //users.update(result);
                 ws.send("balance " + noOtherWay.balance)
                 let numbers = slot.getSlotNumbers().split('');
-                ws.send("SlotResult " + JSON.stringify({ serverSeed: slot.serverSeed, result: slot.result(), numbers: numbers}))
+                let dataToSend = { serverSeed: slot.serverSeed, result: slot.result(), numbers: numbers, nextSSH: '' }
                 slot = new Slot('', 1);
+                dataToSend.nextSSH = slot.serverHash;
+                ws.send("SlotResult " + JSON.stringify(dataToSend))
             }
         }
     });

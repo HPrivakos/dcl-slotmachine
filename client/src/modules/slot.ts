@@ -44,6 +44,7 @@ export class HandleSystem implements ISystem {
                 spin.speed = 120;
                 spin.direction = Vector3.Backward();
                 transform.rotation.eulerAngles = new Vector3(0,0,0)
+                spin.running = false;
               }
             }
       }
@@ -116,11 +117,12 @@ export class Slot_Machine {
       this.wheel_3.add(new SpinWheel());
       this.spin_handle.add(
           new OnClick(e => {
-          socket.send("Slot Provably");
-          let spin = this.spin_handle.get(SpinHandle)
-              if (!this.active){
+              let spin = this.spin_handle.get(SpinHandle)
+              if (!this.active && !spin.running){
+                    socket.send("SlotProvably");
                   spin.active = true
                   this.active = true
+                  spin.running = true
               }
           this.wheel_1.get(SpinWheel).active = true;
           this.wheel_2.get(SpinWheel).active = true;
@@ -130,11 +132,11 @@ export class Slot_Machine {
     }
 
     setWheels(values: Array<number>){
-      log(values)
         if(values.length !== 3) return;
         this.wheel_1.get(SpinWheel).stopAt = values[0];
         this.wheel_2.get(SpinWheel).stopAt = values[1];
         this.wheel_3.get(SpinWheel).stopAt = values[2];
+        this.active = false;
     }
 
     build_shape(){

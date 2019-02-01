@@ -14,6 +14,7 @@
         "decentraland-ecs": "^5.0.0"
     },
     "dependencies": {
+        "crypto-random-string": "^1.0.0",
         "eth-connect": "^4.0.1"
     }
 }
