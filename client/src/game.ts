@@ -51,8 +51,14 @@ let socket = new WebSocket(socketUrl);
 
 
 export class reconnectSocket implements ISystem {
+    frames: number;
+    constructor() {
+        this.frames = 0;
+    }
            update(dt: number) {
-               if(socket.CLOSED){
+               this.frames++;
+               if(socket.CLOSED && this.frames > 120){
+                   this.frames = 0
                    socket = new WebSocket(socketUrl);
                }
            }

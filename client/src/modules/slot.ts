@@ -17,7 +17,7 @@ export class SpinWheel {
     fraction: number = 0;
     speed: number = 120;
     direction: Vector3 = Vector3.Forward();
-    stopAt: boolean | number = false;
+    stopAt: number = 999;
 }
 
 const handles = engine.getComponentGroup(SpinHandle)
@@ -53,10 +53,10 @@ export class HandleSystem implements ISystem {
 
 export class WheelSystem implements ISystem {
 
-  value: boolean | number;
+  value: number;
 
   constructor(){
-    this.value = false;
+    this.value = 999;
   }
 
   update(dt: number) {
@@ -71,12 +71,14 @@ export class WheelSystem implements ISystem {
             // check state
             if (spin.active) {
                 transform.rotate(spin.direction, spin.speed * dt);
-                if(this.value !== false){
-                    if ((transform.rotation.eulerAngles.z > this.value * 36 + 15))
-                    {
-                        transform.rotation.eulerAngles = new Vector3(0, 0, (this.value * 36 + 10));
+                if(this.value.toString().length != 3){
+                    if (transform.rotation.eulerAngles.z > this.value * 36 + 15
+                        &&
+                        transform.rotation.eulerAngles.z < this.value * 36 + 35
+                    ) {
+                        transform.rotation.eulerAngles = new Vector3(0, 0, this.value * 36 + 10);
                         spin.active = false;
-                        this.value = false;
+                        this.value = 999;
                     }
                 }
             }
