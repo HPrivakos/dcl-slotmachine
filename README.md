@@ -1,6 +1,6 @@
 # Slot machine
 
-
+You need to be logged with metamask to play  
 
 ### Provably fair
 The slot machine have provably fair, to verify the result use
