@@ -3,7 +3,6 @@ import { Slot_Machine } from "./modules/slot"
 import { getProvider } from "@decentraland/web3-provider";
 import { getUserAccount } from "@decentraland/EthereumController";
 import * as eth from "../node_modules/eth-connect/esm";
-import { playSound } from "@decentraland/SoundController";
 
 let randomString = (len):string => {
     var text = "";
@@ -107,11 +106,6 @@ socket.onmessage = function (event) {
             gameVar.serverSeed = parsed.serverSeed
             gameVar.result = parsed.result
             gameVar.nextServerSeedHash = parsed.nextSSH
-            if (gameVar.result >= 25){
-                playSound("sounds/jackpot.mp3", {
-                    volume: 100
-                })
-            }
             slot.setWheels(parsed.numbers)
         }
     }
