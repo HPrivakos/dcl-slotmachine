@@ -1,3 +1,4 @@
+let socketUrl = "ws://hprivakos.net:8080";
 import { Slot_Machine } from "./modules/slot"
 import { getProvider } from "@decentraland/web3-provider";
 import { getUserAccount } from "@decentraland/EthereumController";
@@ -36,7 +37,7 @@ text.add(
     let updateText = ()=>{
         let msg = `Balance: ${gameVar.balance}\nClient seed: ${gameVar.clientSeed}\n`;
         if (gameVar.serverSeedHash) msg += `Server hash:\n${gameVar.serverSeedHash.slice(0, 32)}\n${gameVar.serverSeedHash.slice(32)}\n`;
-        if (gameVar.serverSeedHash && gameVar.serverSeed) msg += `Server seed:\n${gameVar.serverSeed.toUpperCase()}\n\n\n`;
+        if (gameVar.serverSeedHash && gameVar.serverSeed) msg += `Server seed:\n${gameVar.serverSeed}\n\n\n`;
         if(gameVar.serverSeedHash && gameVar.result != 0) msg += `Won: ${gameVar.result} token`;
         else if(gameVar.serverSeedHash && gameVar.result == 0) msg += `Won nothing`;
         if (gameVar.nextClientSeed !== null) msg += `\n\nNext client seed: ${gameVar.nextClientSeed}`
@@ -46,23 +47,24 @@ text.add(
         text.set(textMsg);
     }
 
-let socketUrl = "ws://localhost:8080";
 let socket = new WebSocket(socketUrl);
 
 
-export class reconnectSocket implements ISystem {
+class reconnectSocket implements ISystem {
     frames: number;
     constructor() {
         this.frames = 0;
     }
-           update(dt: number) {
-               this.frames++;
-               if(socket.CLOSED && this.frames > 120){
-                   this.frames = 0
-                   socket = new WebSocket(socketUrl);
-               }
-           }
-       }
+    update(dt: number) {
+        this.frames++;
+        if(socket.CLOSED && this.frames > 20*30){
+            this.frames = 0
+            socket = new WebSocket(socketUrl);
+        }
+    }
+}
+
+
 
 
 
@@ -98,7 +100,10 @@ socket.onmessage = function (event) {
         }
         if (data.indexOf("SlotResult") == 0){
             let parsed = JSON.parse(data.slice(11))
-            log(parsed)
+            log(gameVar.serverSeedHash)
+            log(parsed.serverSeed)
+            log(gameVar.clientSeed)
+            log(parsed.numbers)
             gameVar.serverSeed = parsed.serverSeed
             gameVar.result = parsed.result
             gameVar.nextServerSeedHash = parsed.nextSSH
@@ -140,3 +145,16 @@ let magenta = Color3.Magenta()
 let yellow = Color3.Yellow()
 let gray = Color3.Gray()
 let teal = Color3.Teal()
+
+
+class loop implements ISystem {
+    update(dt: number) {
+        if (slot.newClientSeed == true){
+            slot.newClientSeed = false;
+            if (gameVar.nextClientSeed == null) gameVar.clientSeed = randomString(16);
+            else {gameVar.nextClientSeed = randomString(16);}
+            updateText();
+        }
+    }
+}
+engine.addSystem(new loop());

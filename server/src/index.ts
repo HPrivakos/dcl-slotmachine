@@ -44,7 +44,7 @@ wss.on('connection', (ws) => {
             ws.send("SlotProva "+slot.serverHash)
         }
         if (message.indexOf("SlotSpin") == 0) {
-            let clientSeed = message.split(" ")[2];
+            let clientSeed = message.split(" ")[1];
             slot.clientSeed = clientSeed;
             let result = db.get('users').find({ eth: ethAddress }).value()
             let noOtherWay = JSON.parse(JSON.stringify(result))

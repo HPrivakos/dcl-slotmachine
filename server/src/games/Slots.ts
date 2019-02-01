@@ -28,6 +28,8 @@ export default class Slot {
 
     public set clientSeed(v : string) {
         this.gameData.clientSeed = v;
+        console.log(v);
+        
     }
     
     public get serverHash() : string {
@@ -39,12 +41,17 @@ export default class Slot {
     }
     
     getSlotNumbers(serverSeed: string = this.gameData.serverSeed, clientSeed: string = this.gameData.clientSeed): string {
+        console.log(serverSeed, clientSeed);
+        
         let finalHash = crypto.createHash('sha256').update(serverSeed + clientSeed).digest('hex')
         let six = finalHash.slice(0, 6);
+        console.log(six);
+        
         let final = '';
         for (let index = 0; index < 6; index += 2) {
             final += parseInt(six.slice(index,index+2), 16).toString().slice(-1);
         }
+        console.log(final);
         
         return final;
     }
