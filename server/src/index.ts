@@ -24,9 +24,7 @@ wss.on('connection', (ws) => {
     
     let slot = new Slot("", 1)
     let ethAddress = '';
-    ws.on("message", function incoming(message: any) {
-        console.log(message);
-        
+    ws.on("message", function incoming(message: any) {        
         if (message.startsWith("login ")) {
             ethAddress = message.split(" ")[1];
             console.log(ethAddress);
