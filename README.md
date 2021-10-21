@@ -1,5 +1,9 @@
 # Slot machine
 
+Slot machine made for the Decentraland hackathon of 2019
+
+----
+
 You need to be logged with metamask to play  
 
 ### Provably fair
