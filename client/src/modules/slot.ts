@@ -28,8 +28,8 @@ export class HandleSystem implements ISystem {
       // iterate over the wheels in the component group
       for (let handle of handles.entities) {
           // handy shortcuts
-          let spin = handle.get(SpinHandle)
-          let transform = handle.get(Transform)
+          let spin = handle.getComponent(SpinHandle)
+          let transform = handle.getComponent(Transform)
           // check state
           if (spin.active) {
             transform.rotate(spin.direction, spin.speed * dt)
@@ -63,8 +63,8 @@ export class WheelSystem implements ISystem {
       // iterate over the wheels in the component group
       for (let wheel of wheels.entities) {
           // handy shortcuts
-            let spin = wheel.get(SpinWheel)
-            let transform = wheel.get(Transform)
+            let spin = wheel.getComponent(SpinWheel)
+            let transform = wheel.getComponent(Transform)
 
             if(spin.stopAt != this.value) this.value = spin.stopAt;
 
@@ -114,26 +114,26 @@ export class Slot_Machine {
                this.build_shape();
                this.move();
 
-               this.spin_handle.add(new SpinHandle());
-               this.wheel_1.add(new SpinWheel());
-               this.wheel_2.add(new SpinWheel());
-               this.wheel_3.add(new SpinWheel());
-               this.spin_handle.add(
+               this.spin_handle.addComponent(new SpinHandle());
+               this.wheel_1.addComponent(new SpinWheel());
+               this.wheel_2.addComponent(new SpinWheel());
+               this.wheel_3.addComponent(new SpinWheel());
+               this.spin_handle.addComponent(
                    new OnClick(e => {
-                       let spin = this.spin_handle.get(SpinHandle);
+                       let spin = this.spin_handle.getComponent(SpinHandle);
                        if (!this.active && !spin.running) {
                            socket.send("SlotProvably");
                            spin.active = true;
                            this.active = true;
                            spin.running = true;
                        }
-                       this.wheel_1.get(SpinWheel).active = true;
-                       this.wheel_2.get(SpinWheel).active = true;
-                       this.wheel_3.get(SpinWheel).active = true;
+                       this.wheel_1.getComponent(SpinWheel).active = true;
+                       this.wheel_2.getComponent(SpinWheel).active = true;
+                       this.wheel_3.getComponent(SpinWheel).active = true;
                    })
                );
 
-               this.buttom_1.add(
+               this.buttom_1.addComponent(
                    new OnClick(e => {
                        this.newClientSeed = true;
                    })
@@ -142,35 +142,35 @@ export class Slot_Machine {
 
            setWheels(values: Array<number>) {
                if (values.length !== 3) return;
-               this.wheel_1.get(SpinWheel).stopAt = values[0];
-               this.wheel_2.get(SpinWheel).stopAt = values[1];
-               this.wheel_3.get(SpinWheel).stopAt = values[2];
+               this.wheel_1.getComponent(SpinWheel).stopAt = values[0];
+               this.wheel_2.getComponent(SpinWheel).stopAt = values[1];
+               this.wheel_3.getComponent(SpinWheel).stopAt = values[2];
                this.active = false;
            }
 
            build_shape() {
-               this.core.add(
+               this.core.addComponent(
                    new GLTFShape("models/Slot/SlotMachine.gltf")
                );
-               this.wheel_1.add(new GLTFShape("models/Slot/wheel.gltf"));
-               this.wheel_2.add(new GLTFShape("models/Slot/wheel.gltf"));
-               this.wheel_3.add(new GLTFShape("models/Slot/wheel.gltf"));
-               this.buttom_1.add(
+               this.wheel_1.addComponent(new GLTFShape("models/Slot/wheel.gltf"));
+               this.wheel_2.addComponent(new GLTFShape("models/Slot/wheel.gltf"));
+               this.wheel_3.addComponent(new GLTFShape("models/Slot/wheel.gltf"));
+               this.buttom_1.addComponent(
                    new GLTFShape("models/Slot/Buttom_01.gltf")
                );
-               this.buttom_2.add(
+               this.buttom_2.addComponent(
                    new GLTFShape("models/Slot/Buttom_02.gltf")
                );
-               this.buttom_3.add(
+               this.buttom_3.addComponent(
                    new GLTFShape("models/Slot/Buttom_03.gltf")
                );
-               this.spin_handle.add(
+               this.spin_handle.addComponent(
                    new GLTFShape("models/Slot/SpinHandle.gltf")
                );
            }
 
            move() {
-               this.core.add(
+               this.core.addComponent(
                    new Transform({
                        position: this.position,
                        scale: new Vector3(
@@ -181,11 +181,11 @@ export class Slot_Machine {
                    })
                );
 
-               this.wheel_1.add(new Transform());
-               this.wheel_2.add(new Transform());
-               this.wheel_3.add(new Transform());
+               this.wheel_1.addComponent(new Transform());
+               this.wheel_2.addComponent(new Transform());
+               this.wheel_3.addComponent(new Transform());
 
-               this.spin_handle.add(new Transform());
+               this.spin_handle.addComponent(new Transform());
 
                this.wheel_1.setParent(this.core);
                this.wheel_2.setParent(this.core);
@@ -194,27 +194,27 @@ export class Slot_Machine {
                this.spin_handle.setParent(this.core);
 
                this.wheel_1
-                   .get(Transform)
+                   .getComponent(Transform)
                    .position.set(-0.13, 4.53, -0.86);
-               this.wheel_2.get(Transform).position.set(-0.13, 4.53, 0);
+               this.wheel_2.getComponent(Transform).position.set(-0.13, 4.53, 0);
                this.wheel_3
-                   .get(Transform)
+                   .getComponent(Transform)
                    .position.set(-0.13, 4.53, 0.86);
-               this.wheel_1.get(
+               this.wheel_1.getComponent(
                    Transform
                ).rotation.eulerAngles = new Vector3(0, 0, 10);
-               this.wheel_2.get(
+               this.wheel_2.getComponent(
                    Transform
                ).rotation.eulerAngles = new Vector3(0, 0, 10);
-               this.wheel_3.get(
+               this.wheel_3.getComponent(
                    Transform
                ).rotation.eulerAngles = new Vector3(0, 0, 10);
 
                this.spin_handle
-                   .get(Transform)
+                   .getComponent(Transform)
                    .position.set(0, 4.33, 1.74);
 
-               this.buttom_1.add(
+               this.buttom_1.addComponent(
                    new Transform({
                        position: this.position,
                        scale: new Vector3(
@@ -224,7 +224,7 @@ export class Slot_Machine {
                        ),
                    })
                );
-               this.buttom_2.add(
+               this.buttom_2.addComponent(
                    new Transform({
                        position: this.position,
                        scale: new Vector3(
@@ -234,7 +234,7 @@ export class Slot_Machine {
                        ),
                    })
                );
-               this.buttom_3.add(
+               this.buttom_3.addComponent(
                    new Transform({
                        position: this.position,
                        scale: new Vector3(
@@ -247,30 +247,30 @@ export class Slot_Machine {
            }
 
            rotate(value: number) {
-               this.core.get(Transform).rotation = Quaternion.Euler(
+               this.core.getComponent(Transform).rotation = Quaternion.Euler(
                    0,
                    value,
                    0
                );
-               //this.wheel_1.get(Transform).rotation = Quaternion.Euler(0, value, 0)
-               //this.wheel_2.get(Transform).rotation = Quaternion.Euler(0, value, 0)
-               //this.wheel_3.get(Transform).rotation = Quaternion.Euler(0, value, 0)
-               this.buttom_1.get(Transform).rotation = Quaternion.Euler(
+               //this.wheel_1.getComponent(Transform).rotation = Quaternion.Euler(0, value, 0)
+               //this.wheel_2.getComponent(Transform).rotation = Quaternion.Euler(0, value, 0)
+               //this.wheel_3.getComponent(Transform).rotation = Quaternion.Euler(0, value, 0)
+               this.buttom_1.getComponent(Transform).rotation = Quaternion.Euler(
                    0,
                    value,
                    0
                );
-               this.buttom_2.get(Transform).rotation = Quaternion.Euler(
+               this.buttom_2.getComponent(Transform).rotation = Quaternion.Euler(
                    0,
                    value,
                    0
                );
-               this.buttom_3.get(Transform).rotation = Quaternion.Euler(
+               this.buttom_3.getComponent(Transform).rotation = Quaternion.Euler(
                    0,
                    value,
                    0
                );
-               //this.spin_handle.get(Transform).rotation = Quaternion.Euler(0, value, 0)
+               //this.spin_handle.getComponent(Transform).rotation = Quaternion.Euler(0, value, 0)
            }
 
            show() {
